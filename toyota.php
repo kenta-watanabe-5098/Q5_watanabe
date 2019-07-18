@@ -5,8 +5,8 @@ class Toyota extends Car {
         $this->capacity = 5;
         $this->price = 0;
         $this->speed = 150;
-        $this->accelationFactor = 0.2;
-        $this->brakingFriction = 0.2;
+        $this->accelationFactor = 0.4;
+        $this->brakingFriction = 0.4;
     }
 
     public function addOption($price) {
