@@ -5,8 +5,8 @@ class Ferrari extends Car {
         $this->price = 7000000;
         $this->capacity = 3;
         $this->speed = 300;
-        $this->accelationFactor = 0.4;
-        $this->brakingFriction = 0.4;
+        $this->accelationFactor = 0.2;
+        $this->brakingFriction = 0.2;
     }
 }
 
