@@ -6,7 +6,7 @@ class Honda extends Car {
         $this->capacity = 6;
         $this->speed = 200;
         $this->accelationFactor = 0.3;
-        $this->brakingFriction = 0.2;
+        $this->brakingFriction = 0.3;
     }
 }
 ?>

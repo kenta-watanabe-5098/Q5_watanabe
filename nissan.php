@@ -7,8 +7,8 @@ class Nissan extends Car {
         $this->capacity = 5;
         $this->speed = 160;
         $this->speed *= 0.6;
-        $this->accelationFactor = 0.2;
-        $this->brakingFriction = 0.1;
+        $this->accelationFactor = 0.4;
+        $this->brakingFriction = 0.4;
     }
 }
 ?>

@@ -42,7 +42,7 @@ class Car {
     }
 
     public function brakeRate() {
-        $this->brakeTimes = rand(100,1000);
+        $this->brakeTimes = rand(100,10000);
     }
 
     public function convertToHoursMins($time, $format = '%d時間%d分') {

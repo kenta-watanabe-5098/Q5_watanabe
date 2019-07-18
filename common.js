@@ -1,5 +1,6 @@
 function numbering() {
     let array_time = [toyota_total_time, honda_total_time, nissan_total_time, ferrari_total_time];
+    console.log(array_time);
 
     let toyota = document.getElementById('toyota_time');
     let honda = document.getElementById('honda_time');
