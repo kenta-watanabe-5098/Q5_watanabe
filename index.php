@@ -1,5 +1,5 @@
 <?php
-require('object.php');
+require('car.php');
 require('toyota.php');
 require('honda.php');
 require('nissan.php');
@@ -17,105 +17,121 @@ if(isset($_POST['road']) && $_POST['road'] >= 1000) {
     // Toyota レースタイムの生成
     $toyota = new Toyota();
     
-    $toyota->spec($price);
-    
-    $max_toyota = $toyota->speed;
-    
-    $toyota->acceleRate();
-    $a = $toyota->accele;
-    for($i=1; $i<$a; $i++) {
+    $toyota->addOption($price);
+    $toyota->accele();
+    $toyota->brakerate();
+    $brakingtoyota = $toyota->brakeTimes;
+
+    $toyota_accele_distance = $toyota->distanceToMaxSpeed;
+    $toyota_brake_distance = 0;
+    $toyota_accele_time = $toyota->TimeToMaxSpeed;
+    $toyota_brake_time = 0;
+
+    for($i = 0; $i < $brakingtoyota; $i++) {
         $toyota->accele();
-    }
-    
-    $toyota->brakeRate();
-    $b = $toyota->brake;
-    for($i=1; $i<=$b; $i++) {
+        $toyota_accele_distance += $toyota->distanceToMaxSpeed / 1000;
+        $toyota_accele_time += $toyota->TimeToMaxSpeed;
+
         $toyota->brake();
+        $toyota_brake_distance += $toyota->distanceToStop / 1000;
+        $toyota_brake_time += $toyota->TimeToStop;
     }
-    
-    if($max_toyota < $toyota->speed) {
-        $toyota->speed = $max_toyota;
-    } else {
-        round($toyota->speed);
-    }
-    
-    $toyota_time = round($road / $toyota->speed);
-    // var_dump($toyota->speed);
+
+    $a = round($toyota_accele_distance + $toyota_brake_distance);
+    $toyota_road = $road - $a; // 単位：km
+
+    $toyota_constant_time = $toyota_road / $toyota->speed;
+    $toyota_total_time = round(($toyota_constant_time * 60) + (($toyota_accele_time + $toyota_brake_time) / 60)); // 単位：分
+    $toyota_time = $toyota->convertToHoursMins($toyota_total_time, $format = '%d時間%d分');
+    // var_dump($toyota_time);
     // exit();
+
     
-    // Honda レースタイムの生成
+    // Honda レースタイム生成
     $honda = new Honda();
-    $max_honda = $honda->speed;
     
-    $honda->acceleRate();
-    $a = $honda->accele;
-    for($i=1; $i<$a; $i++) {
+    $honda->brakerate();
+    $brakinghonda = $honda->brakeTimes;
+
+    $honda_accele_distance = $honda->distanceToMaxSpeed;
+    $honda_brake_distance = 0;
+    $honda_accele_time = $honda->TimeToMaxSpeed;
+    $honda_brake_time = 0;
+
+    for($i = 0; $i < $brakinghonda; $i++) {
         $honda->accele();
-    }
-    
-    $honda->brakeRate();
-    $b = $honda->brake;
-    for($i=1; $i<=$b; $i++) {
+        $honda_accele_distance += $honda->distanceToMaxSpeed / 1000;
+        $honda_accele_time += $honda->TimeToMaxSpeed;
+
         $honda->brake();
+        $honda_brake_distance += $honda->distanceToStop / 1000;
+        $honda_brake_time += $honda->TimeToStop;
     }
+
+    $a = round($honda_accele_distance + $honda_brake_distance);
+    $honda_road = $road - $a; // 単位：km
+
+    $honda_constant_time = $honda_road / $honda->speed;
+    $honda_total_time = round(($honda_constant_time * 60) + (($honda_accele_time + $honda_brake_time) / 60)); // 単位：分
+    $honda_time = $honda->convertToHoursMins($honda_total_time, $format = '%d時間%d分');
+
     
-    if($max_honda < $honda->speed) {
-        $honda->speed = $max_honda;
-    } else {
-        round($honda->speed);
-    }
-    
-    $honda_time = round($road / $honda->speed);
-    
-    
-    // Nissan レースタイムの生成
+    // Nissan レースタイム生成
     $nissan = new Nissan();
-    $max_nissan = $nissan->speed;
     
-    $nissan->acceleRate();
-    $a = $nissan->accele;
-    for($i=1; $i<$a; $i++) {
+    $nissan->brakerate();
+    $brakingnissan = $nissan->brakeTimes;
+
+    $nissan_accele_distance = $nissan->distanceToMaxSpeed;
+    $nissan_brake_distance = 0;
+    $nissan_accele_time = $nissan->TimeToMaxSpeed;
+    $nissan_brake_time = 0;
+
+    for($i = 0; $i < $brakingnissan; $i++) {
         $nissan->accele();
-    }
-    
-    $nissan->brakeRate();
-    $b = $nissan->brake;
-    for($i=1; $i<=$b; $i++) {
+        $nissan_accele_distance += $nissan->distanceToMaxSpeed / 1000;
+        $nissan_accele_time += $nissan->TimeToMaxSpeed;
+
         $nissan->brake();
+        $nissan_brake_distance += $nissan->distanceToStop / 1000;
+        $nissan_brake_time += $nissan->TimeToStop;
     }
-    
-    if($max_nissan < $nissan->speed) {
-        $nissan->speed = $max_nissan;
-    } else {
-        round($nissan->speed);
-    }
-    
-    $nissan_time = round($road / $nissan->speed);
-    
-    
-    // Ferrari レースタイムの生成
+
+    $a = round($nissan_accele_distance + $nissan_brake_distance);
+    $nissan_road = $road - $a; // 単位：km
+
+    $nissan_constant_time = $nissan_road / $nissan->speed;
+    $nissan_total_time = round(($nissan_constant_time * 60) + (($nissan_accele_time + $nissan_brake_time) / 60)); // 単位：分
+    $nissan_time = $nissan->convertToHoursMins($nissan_total_time, $format = '%d時間%d分');
+
+
+    // Ferrari レースタイム生成
     $ferrari = new Ferrari();
-    $max_ferrari = $ferrari->speed;
     
-    $ferrari->acceleRate();
-    $a = $ferrari->accele;
-    for($i=1; $i<$a; $i++) {
+    $ferrari->brakerate();
+    $brakingferrari = $ferrari->brakeTimes;
+
+    $ferrari_accele_distance = $ferrari->distanceToMaxSpeed;
+    $ferrari_brake_distance = 0;
+    $ferrari_accele_time = $ferrari->TimeToMaxSpeed;
+    $ferrari_brake_time = 0;
+
+    for($i = 0; $i < $brakingferrari; $i++) {
         $ferrari->accele();
-    }
-    
-    $ferrari->brakeRate();
-    $b = $ferrari->brake;
-    for($i=1; $i<=$b; $i++) {
+        $ferrari_accele_distance += $ferrari->distanceToMaxSpeed / 1000;
+        $ferrari_accele_time += $ferrari->TimeToMaxSpeed;
+
         $ferrari->brake();
+        $ferrari_brake_distance += $ferrari->distanceToStop / 1000;
+        $ferrari_brake_time += $ferrari->TimeToStop;
     }
-    
-    if($max_ferrari < $ferrari->speed) {
-        $ferrari->speed = $max_ferrari;
-    } else {
-        round($ferrari->speed);
-    }
-    
-    $ferrari_time = round($road / $ferrari->speed);
+
+    $a = round($ferrari_accele_distance + $ferrari_brake_distance);
+    $ferrari_road = $road - $a; // 単位：km
+
+    $ferrari_constant_time = $ferrari_road / $ferrari->speed;
+    $ferrari_total_time = round(($ferrari_constant_time * 60) + (($ferrari_accele_time + $ferrari_brake_time) / 60)); // 単位：分
+    $ferrari_time = $ferrari->convertToHoursMins($ferrari_total_time, $format = '%d時間%d分');
 
     $_POST = array();
 
@@ -149,31 +165,31 @@ if(isset($_POST['road']) && $_POST['road'] >= 1000) {
     </tr>
     <tr>
         <th id="toyota"><?php if(isset($toyota->maker)) {print($toyota->maker);} ?></th>
-        <th id="toyota_time" style="background-color: none;"><?php if(isset($toyota_time)) {print(round($toyota_time) . '時間');} ?></th>
+        <th id="toyota_time" style="background-color: none;"><?php if(isset($toyota_total_time)) {print($toyota_time);} ?></th>
         <th><?php if(isset($toyota->speed)) {print(round($toyota->speed) . 'km/h');} ?></th>
     </tr>
     <tr>
         <th id="honda"><?php if(isset($honda->maker)) {print($honda->maker);} ?></th>
-        <th id="honda_time" style="background-color: none;"><?php if(isset($honda_time)) {print(round($honda_time) . '時間');} ?></th>
+        <th id="honda_time" style="background-color: none;"><?php if(isset($honda_total_time)) {print($honda_time);} ?></th>
         <th><?php if(isset($honda->speed)) {print(round($honda->speed) . 'km/h');} ?></th>
     </tr>    
     <tr>
         <th id="nissan"><?php if(isset($nissan->maker)) {print($nissan->maker);} ?></th>
-        <th id="nissan_time" style="background-color: none;"><?php if(isset($nissan_time)) {print(round($nissan_time) . '時間');} ?></th>
+        <th id="nissan_time" style="background-color: none;"><?php if(isset($nissan_total_time)) {print($nissan_time);} ?></th>
         <th><?php if(isset($nissan->speed)) {print(round($nissan->speed) . 'km/h');} ?></th>
     </tr>
     <tr>
         <th id="ferrari"><?php if(isset($ferrari->maker)) {print($ferrari->maker);} ?></th>
-        <th id="ferrari_time" style="background-color: none;"><?php if(isset($ferrari_time)) {print(round($ferrari_time) . '時間');} ?></th>
+        <th id="ferrari_time" style="background-color: none;"><?php if(isset($ferrari_total_time)) {print($ferrari_time);} ?></th>
         <th><?php if(isset($ferrari->speed)) {print(round($ferrari->speed) . 'km/h');} ?></th>
     </tr>
 
 </table>
 <script>
-    var toyota_time = <?php echo $toyota_time; ?>;
-    var honda_time = <?php echo $honda_time; ?>;
-    var nissan_time = <?php echo $nissan_time; ?>;
-    var ferrari_time = <?php echo $ferrari_time; ?>;
+    var toyota_total_time = <?php echo $toyota_total_time; ?>;
+    var honda_total_time = <?php echo $honda_total_time; ?>;
+    var nissan_total_time = <?php echo $nissan_total_time; ?>;
+    var ferrari_total_time = <?php echo $ferrari_total_time; ?>;
 </script>
 <script src="/object/q5/common.js"></script>   
 </body>
